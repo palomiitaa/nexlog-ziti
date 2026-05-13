@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nexlog"
+version = "0.1.0"
+description = "OpenZiti audit log collector & SIEM forwarder"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+keywords = ["ziti", "zero-trust", "siem", "audit", "security"]
+dependencies = ["requests>=2.31"]
+
+[project.scripts]
+nexlog = "nexlog.cli.main:main"
+
+[project.urls]
+Homepage = "https://nexlog.dev"
+Repository = "https://gitlab.com/DEIN_USERNAME/nexlog"
