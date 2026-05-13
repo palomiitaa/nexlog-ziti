@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexlog – OpenZiti Audit Log Collector & SIEM Forwarder</title>
+  <meta name="description" content="Nexlog bridges OpenZiti and your SIEM. Collect every audit event, normalise to JSON or CEF, and forward to Elastic, Splunk or Wazuh.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0c0f; color: #e2e8f0; }
+    a { text-decoration: none; }
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 2.5rem; border-bottom: 0.5px solid #1e2736; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 28px; height: 28px; background: #1d9e75; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+    .logo-text { font-size: 17px; font-weight: 500; color: #f1f5f9; letter-spacing: -0.3px; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: 13px; color: #94a3b8; }
+    .nav-links a:hover { color: #e2e8f0; }
+    .btn-gh { background: #1e2736; border: 0.5px solid #2d3748; color: #e2e8f0 !important; padding: 7px 16px; border-radius: 6px; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+    .btn-gh:hover { background: #2d3748; }
+    .hero { padding: 5rem 2.5rem 3rem; max-width: 780px; margin: 0 auto; text-align: center; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; background: #0f2820; border: 0.5px solid #1d9e75; color: #5dcaa5; font-size: 12px; padding: 5px 12px; border-radius: 20px; margin-bottom: 2rem; }
+    .badge-dot { width: 6px; height: 6px; background: #1d9e75; border-radius: 50%; }
+    .hero h1 { font-size: 42px; font-weight: 500; color: #f1f5f9; line-height: 1.15; letter-spacing: -1px; margin-bottom: 1.2rem; }
+    .hero h1 span { color: #1d9e75; }
+    .hero p { font-size: 16px; color: #94a3b8; line-height: 1.7; max-width: 560px; margin: 0 auto 2rem; }
+    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: #1d9e75; color: #fff !important; padding: 10px 22px; border-radius: 7px; font-size: 14px; }
+    .btn-primary:hover { background: #0f6e56; }
+    .btn-secondary { background: transparent; border: 0.5px solid #2d3748; color: #94a3b8 !important; padding: 10px 22px; border-radius: 7px; font-size: 14px; }
+    .btn-secondary:hover { border-color: #4a5568; color: #e2e8f0 !important; }
+    .code-block { margin: 3rem auto; max-width: 600px; background: #0d1117; border: 0.5px solid #1e2736; border-radius: 10px; overflow: hidden; }
+    .code-header { background: #161b22; padding: 10px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 0.5px solid #1e2736; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .code-body { padding: 1.2rem 1.5rem; font-size: 13px; line-height: 1.8; font-family: 'SFMono-Regular', Consolas, monospace; }
+    .c-green { color: #5dcaa5; }
+    .c-gray-text { color: #4a5568; }
+    .c-white { color: #e2e8f0; }
+    .c-yellow { color: #fac775; }
+    .section { padding: 3rem 2.5rem; max-width: 860px; margin: 0 auto; }
+    .section-label { font-size: 12px; color: #1d9e75; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.8rem; }
+    .section-title { font-size: 26px; font-weight: 500; color: #f1f5f9; margin-bottom: 0.6rem; }
+    .section-sub { font-size: 15px; color: #64748b; }
+    .flow { display: flex; align-items: center; gap: 0; margin: 2.5rem 0; flex-wrap: wrap; justify-content: center; }
+    .flow-box { background: #0d1117; border: 0.5px solid #1e2736; border-radius: 8px; padding: 14px 20px; text-align: center; min-width: 130px; }
+    .flow-box.active { border-color: #1d9e75; }
+    .fb-icon { font-size: 20px; color: #1d9e75; margin-bottom: 6px; }
+    .fb-title { font-size: 13px; color: #e2e8f0; font-weight: 500; }
+    .fb-sub { font-size: 11px; color: #4a5568; margin-top: 2px; }
+    .flow-arrow { color: #2d3748; font-size: 18px; padding: 0 8px; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: #1e2736; border: 0.5px solid #1e2736; border-radius: 10px; overflow: hidden; margin-top: 2rem; }
+    .feature { background: #0a0c0f; padding: 1.5rem; }
+    .feature:hover { background: #0d1117; }
+    .feat-icon { font-size: 20px; color: #1d9e75; margin-bottom: 10px; }
+    .feat-title { font-size: 14px; font-weight: 500; color: #e2e8f0; margin-bottom: 6px; }
+    .feat-desc { font-size: 13px; color: #64748b; line-height: 1.6; }
+    .events { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 2rem; }
+    .event-card { background: #0d1117; border: 0.5px solid #1e2736; border-radius: 8px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
+    .sev { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 4px; font-family: monospace; }
+    .sev-high { background: #2d1515; color: #f09595; }
+    .sev-med { background: #2d1f0a; color: #fac775; }
+    .sev-low { background: #0f2820; color: #5dcaa5; }
+    .event-name { font-size: 12px; color: #94a3b8; }
+    .outputs { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 2rem; }
+    .output-tag { background: #0d1117; border: 0.5px solid #1e2736; border-radius: 6px; padding: 8px 16px; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+    .output-tag .dot-free { width: 7px; height: 7px; border-radius: 50%; background: #1d9e75; flex-shrink: 0; }
+    .output-tag .dot-ent { width: 7px; height: 7px; border-radius: 50%; background: #378add; flex-shrink: 0; }
+    .output-tag span { color: #94a3b8; }
+    .output-tag .tag-label { color: #e2e8f0; }
+    .divider { border: none; border-top: 0.5px solid #1e2736; margin: 0 2.5rem; }
+    .ent-banner { background: #0a1628; border: 0.5px solid #185fa5; border-radius: 10px; padding: 1.5rem 2rem; margin-top: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .ent-text h3 { font-size: 15px; font-weight: 500; color: #f1f5f9; margin-bottom: 4px; }
+    .ent-text p { font-size: 13px; color: #64748b; }
+    .btn-ent { background: #185fa5; color: #fff !important; padding: 9px 20px; border-radius: 7px; font-size: 13px; white-space: nowrap; }
+    .btn-ent:hover { background: #0c447c; }
+    footer { padding: 2rem 2.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-top: 0.5px solid #1e2736; }
+    .footer-left { font-size: 13px; color: #4a5568; }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 13px; color: #4a5568; }
+    .footer-links a:hover { color: #94a3b8; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-icon">
+      <i class="ti ti-shield-check" style="color:#fff; font-size:15px;"></i>
+    </div>
+    <span class="logo-text">nexlog</span>
+  </div>
+  <div class="nav-links">
+    <a href="#">docs</a>
+    <a href="#">changelog</a>
+    <a href="#">enterprise</a>
+    <a href="https://gitlab.com/palomiitaa/nexlog" class="btn-gh">
+      <i class="ti ti-brand-gitlab"></i> gitlab
+    </a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="badge">
+    <div class="badge-dot"></div>
+    OpenZiti · Zero Trust · SIEM
+  </div>
+  <h1>Audit visibility for your<br><span>zero trust network</span></h1>
+  <p>Nexlog bridges OpenZiti and your SIEM. Collect every audit event, normalise to JSON or CEF, and forward to Elastic, Splunk, Wazuh — or any syslog pipeline.</p>
+  <div class="hero-btns">
+    <a href="https://gitlab.com/palomiitaa/nexlog" class="btn-primary">Get started →</a>
+    <a href="#" class="btn-secondary">Read the docs</a>
+  </div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="dot" style="background:#ff5f57"></div>
+      <div class="dot" style="background:#ffbd2e"></div>
+      <div class="dot" style="background:#28c840"></div>
+      <span style="font-size:12px; color:#4a5568; margin-left:8px;">terminal</span>
+    </div>
+    <div class="code-body">
+      <div><span class="c-gray-text">$</span> <span class="c-green">pip install</span> <span class="c-white">nexlog</span></div>
+      <div><span class="c-gray-text">$</span> <span class="c-green">cp</span> <span class="c-white">nexlog.example.json nexlog.json</span></div>
+      <div><span class="c-gray-text">$</span> <span class="c-green">nexlog</span> <span class="c-yellow">start</span> <span class="c-white">-c nexlog.json</span></div>
+      <div style="margin-top:8px;"><span class="c-gray-text"># streaming audit events…</span></div>
+      <div><span class="c-green">{"event_type":"AuthFail","severity":8,"source_ip":"…"}</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-label">How it works</div>
+  <div class="section-title">Three steps, one pipeline</div>
+  <div class="section-sub">From your Ziti controller to your SIEM in minutes.</div>
+  <div class="flow">
+    <div class="flow-box">
+      <div class="fb-icon"><i class="ti ti-server"></i></div>
+      <div class="fb-title">Ziti Controller</div>
+      <div class="fb-sub">Management API</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box active">
+      <div class="fb-icon"><i class="ti ti-cpu"></i></div>
+      <div class="fb-title">Nexlog</div>
+      <div class="fb-sub">collect · parse · forward</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <div class="fb-icon"><i class="ti ti-chart-bar"></i></div>
+      <div class="fb-title">Your SIEM</div>
+      <div class="fb-sub">Elastic / Splunk / Wazuh</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-label">Features</div>
+  <div class="section-title">Everything you need</div>
+  <div class="features">
+    <div class="feature">
+      <div class="feat-icon"><i class="ti ti-antenna"></i></div>
+      <div class="feat-title">Continuous polling</div>
+      <div class="feat-desc">Polls the Ziti Management API every 5s. Auto re-authenticates on session expiry.</div>
+    </div>
+    <div class="feature">
+      <div class="feat-icon"><i class="ti ti-transform"></i></div>
+      <div class="feat-title">JSON + CEF output</div>
+      <div class="feat-desc">Normalised structured events. CEF works with Splunk, ArcSight, QRadar out of the box.</div>
+    </div>
+    <div class="feature">
+      <div class="feat-icon"><i class="ti ti-shield-lock"></i></div>
+      <div class="feat-title">18 event types</div>
+      <div class="feat-desc">Auth failures, identity changes, posture checks, sessions, enrollments — all covered.</div>
+    </div>
+    <div class="feature">
+      <div class="feat-icon"><i class="ti ti-plug"></i></div>
+      <div class="feat-title">Flexible outputs</div>
+      <div class="feat-desc">stdout, file, syslog in community. Elastic, Splunk HEC, Sentinel in Enterprise.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-label">Event types</div>
+  <div class="section-title">Full audit coverage</div>
+  <div class="section-sub">Every event carries a severity score from 1–10.</div>
+  <div class="events">
+    <div class="event-card"><span class="sev sev-high">sev 8</span><span class="event-name">AuthFail</span></div>
+    <div class="event-card"><span class="sev sev-high">sev 8</span><span class="event-name">PostureCheckFail</span></div>
+    <div class="event-card"><span class="sev sev-high">sev 7</span><span class="event-name">IdentityDelete</span></div>
+    <div class="event-card"><span class="sev sev-med">sev 5</span><span class="event-name">EdgeRouterDelete</span></div>
+    <div class="event-card"><span class="sev sev-med">sev 5</span><span class="event-name">ServiceDelete</span></div>
+    <div class="event-card"><span class="sev sev-low">sev 3</span><span class="event-name">IdentityCreate</span></div>
+    <div class="event-card"><span class="sev sev-low">sev 2</span><span class="event-name">AuthSuccess</span></div>
+    <div class="event-card"><span class="sev sev-low">sev 2</span><span class="event-name">SessionCreate</span></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-label">Outputs</div>
+  <div class="section-title">Works with your stack</div>
+  <div class="outputs">
+    <div class="output-tag"><div class="dot-free"></div><span class="tag-label">stdout</span><span>free</span></div>
+    <div class="output-tag"><div class="dot-free"></div><span class="tag-label">file</span><span>free</span></div>
+    <div class="output-tag"><div class="dot-free"></div><span class="tag-label">syslog</span><span>free</span></div>
+    <div class="output-tag"><div class="dot-ent"></div><span class="tag-label">Elastic</span><span>enterprise</span></div>
+    <div class="output-tag"><div class="dot-ent"></div><span class="tag-label">Splunk HEC</span><span>enterprise</span></div>
+    <div class="output-tag"><div class="dot-ent"></div><span class="tag-label">Sentinel</span><span>enterprise</span></div>
+  </div>
+  <div class="ent-banner">
+    <div class="ent-text">
+      <h3>Nexlog Enterprise</h3>
+      <p>Native Elastic, Splunk HEC, Sentinel, multi-controller, alerting, Docker + Helm chart.</p>
+    </div>
+    <a href="mailto:enterprise@nexlog.dev" class="btn-ent">Contact us →</a>
+  </div>
+</div>
+
+<hr class="divider">
+
+<footer>
+  <span class="footer-left">© 2025 Nexlog · Apache 2.0</span>
+  <div class="footer-links">
+    <a href="https://gitlab.com/palomiitaa/nexlog">gitlab</a>
+    <a href="#">docs</a>
+    <a href="mailto:enterprise@nexlog.dev">enterprise</a>
+  </div>
+</footer>
+
+</body>
+</html>
