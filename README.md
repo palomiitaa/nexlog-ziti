@@ -224,7 +224,7 @@ nexlog/
 - Docker image + Helm chart
 - Priority support & SLA
 
-Contact: **enterprise@nexlog.dev**
+Contact: **admin@cyberfox-swiss.ch**
 
 ---
 
@@ -238,4 +238,4 @@ Pull requests are welcome. Please open an issue first for larger changes.
 
 Community edition: [Apache 2.0](LICENSE)
 
-Enterprise edition: Commercial license — see [LICENSE-ENTERPRISE](LICENSE-ENTERPRISE) or contact enterprise@nexlog.dev
+Enterprise edition: Commercial license — see [LICENSE-ENTERPRISE](LICENSE-ENTERPRISE) or contact admin@cyberfox-swiss.ch
