@@ -1,13 +1,13 @@
-# Nexlog
+# Nexlog-Ziti
 
 > OpenZiti audit log collector & SIEM forwarder
 
-Nexlog bridges your [OpenZiti](https://openziti.io) zero-trust network and your SIEM.
+Nexlog-Ziti bridges your [OpenZiti](https://openziti.io) zero-trust network and your SIEM.
 It continuously polls the Ziti Management API, normalises every audit event into
 structured **JSON** or **CEF**, and forwards the stream to your log pipeline.
 
 ```
-OpenZiti Controller  →  Nexlog  →  stdout / file / syslog / Elastic / Splunk
+OpenZiti Controller  →  Nexlog-Ziti  →  stdout / file / syslog / Elastic / Splunk
 ```
 
 ![License](https://img.shields.io/badge/license-Apache%202.0-green)
@@ -16,13 +16,13 @@ OpenZiti Controller  →  Nexlog  →  stdout / file / syslog / Elastic / Splunk
 
 ---
 
-## Why Nexlog?
+## Why Nexlog-Ziti?
 
 OpenZiti generates rich audit events — identity changes, auth failures, service
 policy updates, posture check results — but ships no built-in SIEM integration.
-Nexlog fills that gap.
+Nexlog-Ziti fills that gap.
 
-| Without Nexlog | With Nexlog |
+| Without Nexlog-Ziti | With Nexlog-Ziti |
 |---|---|
 | Raw JSON buried in controller logs | Structured, normalised events |
 | No SIEM visibility | Works with Elastic, Splunk, Wazuh, Sentinel |
@@ -42,7 +42,7 @@ pip install nexlog
 Or from source:
 
 ```bash
-git clone https://github.com/palomiitaa/nexlog
+git clone https://github.com/palomiitaa/nexlog-ziti
 cd nexlog
 pip install -e .
 ```
@@ -102,7 +102,7 @@ nexlog test --format json_pretty
 ### CEF (Common Event Format)
 
 ```
-CEF:0|Nexlog|ZitiAudit|1.0|401|Authentication Failed|8 rt=2025-01-15T10:30:00Z suser=user-xyz src=192.168.1.42
+CEF:0|Nexlog-Ziti|ZitiAudit|1.0|401|Authentication Failed|8 rt=2025-01-15T10:30:00Z suser=user-xyz src=192.168.1.42
 ```
 
 CEF works out-of-the-box with Splunk, ArcSight, Wazuh, QRadar, and any syslog pipeline.
@@ -213,7 +213,7 @@ nexlog/
 
 ## Enterprise
 
-**Nexlog Enterprise** adds:
+**Nexlog-Ziti Enterprise** adds:
 
 - Native Elastic / OpenSearch output (index templates included)
 - Splunk HEC output
