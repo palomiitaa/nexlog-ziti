@@ -1,0 +1,9 @@
+{
+  "ziti_url":      "https://your-controller:1280",
+  "username":      "admin",
+  "password":      "your-password",
+  "verify_tls":    false,
+  "poll_interval": 5,
+  "format":        "json",
+  "output":        "stdout"
+}
