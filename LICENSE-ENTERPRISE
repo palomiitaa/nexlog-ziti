@@ -1,0 +1,18 @@
+Nexlog Enterprise License
+Copyright (c) 2025 Nexlog
+
+This software and associated documentation files (the "Enterprise Features")
+are proprietary and confidential.
+
+Enterprise Features include:
+- Native Elastic / OpenSearch output
+- Splunk HEC output  
+- Microsoft Sentinel output
+- Multi-controller support
+- Alerting engine
+- Docker image + Helm chart
+
+A valid Enterprise License is required to use these features.
+Redistribution or sublicensing is not permitted without written consent.
+
+For licensing inquiries: enterprise@nexlog.dev
